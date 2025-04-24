@@ -9,23 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Repository klonen
-      - uses: actions/checkout@v4                                      # Klont dein Git-Repo in den Runner :contentReference[oaicite:1]{index=1}
+      # 1. Code auschecken
+      - uses: actions/checkout@v4                                      # Klont dein Repository :contentReference[oaicite:2]{index=2}
 
-      # 2. Node.js-Umgebung einrichten
-      - name: Setup Node.js
-        uses: actions/setup-node@v4                                    # Richtet Node.js (hier v18) im Runner ein :contentReference[oaicite:2]{index=2}
+      # 2. Node.js einrichten
+      - name: Use Node.js
+        uses: actions/setup-node@v4                                    # Installiert Node.js v18 :contentReference[oaicite:3]{index=3}
         with:
           node-version: '18'
 
       # 3. Apify CLI installieren
       - name: Install Apify CLI
-        run: npm install -g apify-cli                                  # Globale Installation der Apify CLI via npm :contentReference[oaicite:3]{index=3}
+        run: npm install -g apify-cli                                  # Globale Installation der CLI :contentReference[oaicite:4]{index=4}
 
-      # 4. Login in Apify
-      - name: Login to Apify
-        run: apify login --token "${{ secrets.APIFY_TOKEN }}"          # Authentifiziert mit deinem API-Token :contentReference[oaicite:4]{index=4}
+      # 4. Token als ENV setzen
+      - name: Configure Apify token
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}                     # Secret in GitHub hinterlegen :contentReference[oaicite:5]{index=5}
+        run: echo "APIFY_TOKEN is set"
 
       # 5. Actor deployen
-      - name: Deploy Actor to Apify Cloud
-        run: apify push --token "${{ secrets.APIFY_TOKEN }}"           # Lädt Code hoch und baut den Actor :contentReference[oaicite:5]{index=5}
+      - name: Deploy Actor
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}                     # CLI nutzt ENV für Authentifizierung :contentReference[oaicite:6]{index=6}
+        run: apify push                                               # Push ohne --token :contentReference[oaicite:7]{index=7}
