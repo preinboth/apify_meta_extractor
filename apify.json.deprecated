@@ -1,0 +1,8 @@
+{
+  "env": {
+    "URL_LIST": {
+      "type": "string",
+      "default": "https://example.com,https://example.org"
+    }
+  }
+}
